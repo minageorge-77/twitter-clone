@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { RequireAuth } from "./components/RequireAuth";
+import { AppShell } from "./components/AppShell";
+import { useMe } from "./hooks/useMe";
+import { AuthPage } from "./pages/AuthPage";
+import { HomePage } from "./pages/HomePage";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { NotificationsPage } from "./pages/NotificationsPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { SettingsPage } from "./pages/SettingsPage";
+import { SuggestedPage } from "./pages/SuggestedPage";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App({ theme, setTheme }) {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth" element={<AuthGate />} />
+
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <AppShell theme={theme} setTheme={setTheme} />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<HomePage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="suggested" element={<SuggestedPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path=":username" element={<ProfilePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+function AuthGate() {
+  const me = useMe();
+
+  if (me.isLoading) {
+    return (
+      <div className="min-h-dvh grid place-items-center">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
+  }
+
+  if (me.data) return <Navigate to="/" replace />;
+  return <AuthPage />;
+}
