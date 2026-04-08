@@ -44,7 +44,7 @@ export function AuthPage() {
         <div className="card bg-base-100 border border-base-300 shadow-xl">
           <div className="card-body gap-4">
             <div>
-              <div className="text-2xl font-bold tracking-tight">Welcome to MinaTweet</div>
+              <div className="text-2xl font-bold tracking-tight">Welcome to Tweeta</div>
               <div className="opacity-70">Modern, fast, responsive Twitter-like clone.</div>
             </div>
 
@@ -116,7 +116,7 @@ export function AuthPage() {
                 />
                 {mode === "signup" ? (
                   <div className="label">
-                    <span className="label-text-alt opacity-70">Backend requires strong password (upper/lower/number/special).</span>
+                    <span className="label-text-alt opacity-70">Use a strong password: (upper/lower/number/special).</span>
                   </div>
                 ) : null}
               </label>
@@ -126,9 +126,18 @@ export function AuthPage() {
               </button>
             </form>
 
-            <div className="text-sm opacity-70">
-              Tip: after login, everything is cached with TanStack Query for speed.
+            <div className="text-sm opacity-70 flex items-center gap-2">
+              <span>Coded by: Mina George</span>
+
+              <a href="https://github.com/minageorge-77" target="_blank" rel="noopener noreferrer">
+                <img
+                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  alt="GitHub"
+                  className="w-6 h-6 hover:scale-110 transition"
+                />
+              </a>
             </div>
+
           </div>
         </div>
 
